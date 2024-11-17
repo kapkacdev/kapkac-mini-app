@@ -49,7 +49,7 @@ const MenuTab: React.FC = () => {
     className="fixed bottom-0 left-0 right-0 gradient-background bg-opacity-90 shadow-xl flex justify-center items-center py-3 z-10 rounded-t-3xl sm:py-4 lg:py-5 space-x-4"
     aria-label="Main navigation"
     style={{
-      background: 'linear-gradient(to bottom, rgba(255, 30, 180, 0.2), rgba(155, 48, 255, 10))',
+      background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 1))',
     }}
     >
       {menuItems.map((item, index) => (
@@ -62,7 +62,7 @@ const MenuTab: React.FC = () => {
           aria-label={item.label}
         >
           <span className="text-2xl">{item.icon}</span>
-          <span className="text-xs text-stone-100">{item.label}</span>
+          <span className="text-xs text-black">{item.label}</span>
         </div>
       ))}
     </nav>

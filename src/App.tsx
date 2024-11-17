@@ -36,11 +36,9 @@ const AppContent: React.FC = () => {
 
             {/* Main Content */}
             <main className="absolute inset-0 flex flex-col justify-center items-center px-2">
-              <div className="bg-purple-100 bg-opacity-75 p-6 rounded-lg shadow-lg">
-                <h1 className="font-mono text-pink-900 font-bold text-3xl text-center mb-4">
-                  Kapkac Mini App
-                </h1>
-              </div>
+            <div>
+              <img src="/src/assets/KAPKAÇ-logo-transparent.png" alt="KAPKAÇ Logo" className="logo" />
+            </div>
             </main>
 
             {/* Bottom Menu Tab */}
