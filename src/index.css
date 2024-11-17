@@ -1,0 +1,21 @@
+/* Importing Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Poppins:wght@400;600&display=swap');
+
+/* Tailwind Directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Full height setup for body, html, and root */
+body, html, #root {
+    height: 100%;
+}
+
+/* Applying fonts */
+body {
+    font-family: 'Poppins', sans-serif; /* Default body font */
+}
+
+.font-title {
+    font-family: 'Audiowide', sans-serif; /* Modern futuristic font for titles */
+}
