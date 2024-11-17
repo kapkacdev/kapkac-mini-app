@@ -1,118 +1,101 @@
-import React, { useEffect, useRef } from "react";
-import Phaser from "phaser";
+import React, { useEffect } from 'react';
+import Phaser from 'phaser';
+import loadScript from './loadScript';
 
-// Main Phaser Scene
-class MainScene extends Phaser.Scene {
-    private player!: Phaser.GameObjects.Sprite;
+class TaxiGame extends Phaser.Scene {
+    backgroundLayer!: Phaser.GameObjects.Layer;
+    roadLayer!: Phaser.GameObjects.Layer;
+    bushLayer!: Phaser.GameObjects.Layer;
+    coinLayer!: Phaser.GameObjects.Layer;
+    trafficLayer!: Phaser.GameObjects.Layer;
+    carLayer!: Phaser.GameObjects.Layer;
+    treeLayer!: Phaser.GameObjects.Layer;
+    UILayer!: Phaser.GameObjects.Layer;
 
     constructor() {
-        super({ key: "MainScene" });
+        super({ key: 'TaxiGame' });
     }
 
-
-    preload(): void {
-        // Load assets
-        this.load.image("taxi", "/assets/taxi.png");
-        this.load.image("steering-wheel", "/assets/steering-wheel.png");
-        this.load.image("car1", "/assets/car1.png");
-        this.load.image("car2", "/assets/car2.png");
-        this.load.image("car3", "/assets/car3.png");
-        this.load.image("car4", "/assets/car4.png");
-        this.load.image("tree1", "/assets/tree1.png");
-        this.load.image("tree2", "/assets/tree2.png");
-        this.load.image("tree3", "/assets/tree3.png");
-        this.load.image("bush1", "/assets/bush1.png");
-        this.load.image("bush2", "/assets/bush2.png");
-
-        // Load spritesheet
-        this.load.spritesheet("coin", "/assets/coin.gif", {
-            frameWidth: 180, // Replace with your coin sprite's frame width
-            frameHeight: 180, // Replace with your coin sprite's frame height
-        });
-
-        // Debug: Log asset loading
-        this.load.on("filecomplete", (key: string) => {
-            console.log(`Asset loaded: ${key}`);
-        });
-
-        this.load.on("loaderror", (file: any) => {
-            console.error(`Failed to load file: ${file.src}`);
-        });
+    preload() {
+        // Load all necessary assets
+        this.load.image('background', 'assets/background.png');
+        this.load.image('road', 'assets/road.png');
+        this.load.image('bush', 'assets/bush.png');
+        this.load.image('coin', 'assets/coin.png');
+        this.load.image('traffic', 'assets/traffic.png');
+        this.load.image('car', 'assets/car.png');
+        this.load.image('tree', 'assets/tree.png');
+        // Add more assets as needed
     }
 
-    create(): void {
-        console.log("Game started!");
+    create() {
+        // Create depth layers
+        this.backgroundLayer = this.add.layer();
+        this.roadLayer = this.add.layer();
+        this.bushLayer = this.add.layer();
+        this.coinLayer = this.add.layer();
+        this.trafficLayer = this.add.layer();
+        this.carLayer = this.add.layer();
+        this.treeLayer = this.add.layer();
+        this.UILayer = this.add.layer();
 
-        // Add a background (green grass for now)
-        const background = this.add.rectangle(400, 300, 800, 600, 0x2ecc71);
-        background.setOrigin(0.5, 0.5);
+        // Set layer depths
+        this.backgroundLayer.setDepth(0);
+        this.roadLayer.setDepth(1);
+        this.bushLayer.setDepth(2);
+        this.coinLayer.setDepth(2.5);
+        this.trafficLayer.setDepth(3);
+        this.carLayer.setDepth(4);
+        this.treeLayer.setDepth(5);
 
-        // Add the road (dark gray rectangle)
-        const road = this.add.rectangle(400, 300, 300, 600, 0x34495e);
-        road.setOrigin(0.5, 0.5);
+        // Add game objects to layers
+        this.backgroundLayer.add(this.add.image(0, 0, 'background').setOrigin(0, 0));
+        this.roadLayer.add(this.add.image(0, 0, 'road').setOrigin(0, 0));
+        this.bushLayer.add(this.add.image(0, 0, 'bush').setOrigin(0, 0));
+        this.coinLayer.add(this.add.image(0, 0, 'coin').setOrigin(0, 0));
+        this.trafficLayer.add(this.add.image(0, 0, 'traffic').setOrigin(0, 0));
+        this.carLayer.add(this.add.image(0, 0, 'car').setOrigin(0, 0));
+        this.treeLayer.add(this.add.image(0, 0, 'tree').setOrigin(0, 0));
+        // Add more game objects as needed
 
-        // Add the player (taxi sprite)
-        this.player = this.add.sprite(400, 500, "taxi");
-        this.player.setScale(0.5);
-        this.player.setOrigin(0.5, 0.5);
-
-        // Debug: Check asset positions
-        console.log("Background position:", background.x, background.y);
-        console.log("Road position:", road.x, road.y);
-        console.log("Player position:", this.player.x, this.player.y);
-
-        // Add other assets and log their positions
-        const car1 = this.add.sprite(400, 400, "car1");
-        console.log("Car1 position:", car1.x, car1.y);
-
-        const tree1 = this.add.sprite(100, 100, "tree1");
-        console.log("Tree1 position:", tree1.x, tree1.y);
-
-        // Add more assets as needed and log their positions
+        // Start the game logic
+        this.startGame();
     }
 
-    update(): void {
-        // Game updates here (currently empty for testing visuals)
+    startGame() {
+        // Implement game start logic here
     }
 }
 
-const GameCanvas: React.FC = () => {
-    const gameRef = useRef<HTMLDivElement>(null);
-
+// React component to render the game
+const GameComponent: React.FC = () => {
     useEffect(() => {
-        if (!gameRef.current) return;
+        const loadGameScripts = async () => {
+            try {
+                await loadScript('https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js');
+                // Add any other game-related scripts here
 
-        // Phaser configuration
-        const config: Phaser.Types.Core.GameConfig = {
-            type: Phaser.AUTO,
-            width: 800,
-            height: 600,
-            parent: gameRef.current,
-            physics: {
-                default: "arcade",
-                arcade: {
-                    gravity: { x:0, y: 0 },
-                    debug: false,
-                },
-            },
-            scene: MainScene,
-            backgroundColor: "#87CEEB", // Light blue sky for background
+                // Initialize Phaser game
+                const config = {
+                    type: Phaser.AUTO,
+                    width: 800,
+                    height: 600,
+                    scene: TaxiGame
+                };
+                new Phaser.Game(config);
+            } catch (error) {
+                console.error(error);
+            }
         };
 
-        const game = new Phaser.Game(config);
-
-        return () => {
-            game.destroy(true); // Cleanup Phaser game instance
-        };
+        loadGameScripts();
     }, []);
 
     return (
-        <div
-            ref={gameRef}
-            className="flex justify-center items-center bg-gray-800"
-            style={{ width: "800px", height: "600px" }}
-        />
+        <div>
+            <div id="game-container"></div>
+        </div>
     );
 };
 
-export default GameCanvas;
+export default GameComponent;
