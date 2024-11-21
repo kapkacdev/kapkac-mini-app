@@ -1,19 +1,19 @@
 // src/App.tsx
+
 import React from 'react';
 import Background from './components/Background';
 import MenuTab from './components/MenuTab';
 import backgroundVideo from './assets/vecteezy_aerial-view-of-the-bosphorus-bridge-in-istanbul-turkey_51072378.mp4';
 import { NavigationProvider, useNavigation } from './context/NavigationContext';
-import TaxiGame from './components/Game/TaxiGame.tsx';
-import Communities from './components/Communities.tsx';
-import Earn from './components/Earn.tsx';
-import Leaderboard from './components/Leaderboard.tsx';
+import TaxiGame from './components/Game/TaxiGame';
+import Communities from './components/Communities';
+import Earn from './components/Earn';
+import Leaderboard from './components/Leaderboard';
+import UserProfile from './components/UserProfile';
 
-// Handles rendering based on the current screen
 const AppContent: React.FC = () => {
   const { currentScreen } = useNavigation();
 
-  // Render the component based on the current screen
   const renderScreen = () => {
     switch (currentScreen) {
       case 'Game':
@@ -24,6 +24,8 @@ const AppContent: React.FC = () => {
         return <Earn />;
       case 'Leaderboard':
         return <Leaderboard />;
+      case 'Profile':
+        return <UserProfile />;
       case 'Menu':
       default:
         return (
@@ -36,9 +38,13 @@ const AppContent: React.FC = () => {
 
             {/* Main Content */}
             <main className="absolute inset-0 flex flex-col justify-center items-center px-2">
-            <div>
-              <img src="/src/assets/KAPKAÇ-logo-transparent.png" alt="KAPKAÇ Logo" className="logo" />
-            </div>
+              <div>
+                <img
+                  src="/src/assets/KAPKAÇ-logo-transparent.png"
+                  alt="KAPKAÇ Logo"
+                  className="logo"
+                />
+              </div>
             </main>
 
             {/* Bottom Menu Tab */}

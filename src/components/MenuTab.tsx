@@ -1,14 +1,28 @@
 // src/components/MenuTab.tsx
+
 import React, { useState, useEffect } from 'react';
-import { useNavigation } from '../context/NavigationContext';
+import { useNavigation, Screen } from '../context/NavigationContext';
+
+interface MenuItem {
+  label: Screen;
+  icon: string;
+}
 
 const MenuTab: React.FC = () => {
   const { navigateTo } = useNavigation();
   const [jigglingIndex, setJigglingIndex] = useState<number | null>(null);
 
+  const menuItems: MenuItem[] = [
+    { label: 'Communities', icon: '🏠' },
+    { label: 'Earn', icon: '💰' },
+    { label: 'Game', icon: '🎮' },
+    { label: 'Leaderboard', icon: '🏆' },
+    { label: 'Profile', icon: String.fromCharCode(0x1330) }
+  ];
+
   useEffect(() => {
     const interval = setInterval(() => {
-      const randomIndex = Math.floor(Math.random() * 4); // Randomly select one of the 4 menu items
+      const randomIndex = Math.floor(Math.random() * menuItems.length);
       setJigglingIndex(randomIndex);
 
       // Stop jiggle effect after 1 second
@@ -16,41 +30,19 @@ const MenuTab: React.FC = () => {
     }, 10000); // Trigger every 10 seconds
 
     return () => clearInterval(interval); // Cleanup interval on component unmount
-  }, []);
+  }, [menuItems.length]);
 
-  const menuItems = [
-    { label: 'Communities', icon: '🏠' },
-    { label: 'Earn', icon: '💰' },
-    { label: 'Game', icon: '🎮' },
-    { label: 'Leaderboard', icon: '🏆' },
-  ];
-
-  const handleItemClick = (label: string) => {
-    switch (label) {
-      case 'Communities':
-        navigateTo('Communities');
-        break;
-      case 'Earn':
-        navigateTo('Earn');
-        break;
-      case 'Game':
-        navigateTo('Game');
-        break;
-      case 'Leaderboard':
-        navigateTo('Leaderboard');
-        break;
-      default:
-        navigateTo('Menu');
-    }
+  const handleItemClick = (label: Screen) => {
+    navigateTo(label);
   };
 
   return (
     <nav
-    className="fixed bottom-0 left-0 right-0 gradient-background bg-opacity-90 shadow-xl flex justify-center items-center py-3 z-10 rounded-t-3xl sm:py-4 lg:py-5 space-x-4"
-    aria-label="Main navigation"
-    style={{
-      background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 1))',
-    }}
+      className="fixed bottom-0 left-0 right-0 bg-opacity-90 shadow-xl flex justify-center items-center py-3 z-10 rounded-t-3xl sm:py-4 lg:py-5 space-x-4"
+      aria-label="Main navigation"
+      style={{
+        background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 1))',
+      }}
     >
       {menuItems.map((item, index) => (
         <div
@@ -60,6 +52,11 @@ const MenuTab: React.FC = () => {
           }`}
           onClick={() => handleItemClick(item.label)}
           aria-label={item.label}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') handleItemClick(item.label);
+          }}
         >
           <span className="text-2xl">{item.icon}</span>
           <span className="text-xs text-black">{item.label}</span>

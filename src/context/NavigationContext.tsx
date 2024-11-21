@@ -1,8 +1,7 @@
-// src/context/NavigationContext.tsx
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-// Extended Screen type to include all navigation targets
-type Screen = 'Menu' | 'Game' | 'Communities' | 'Earn' | 'Leaderboard';
+// Define Screen type to include all navigation targets
+export type Screen = 'Menu' | 'Game' | 'Communities' | 'Earn' | 'Leaderboard' | 'Profile';
 
 interface NavigationContextType {
   currentScreen: Screen;
