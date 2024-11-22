@@ -6,32 +6,18 @@ interface Community {
   id: number
   name: string
   attendees: number
-  totalStakedKJ: string
+  totalKacToken: string
   profileVideo: string // Added profile video field
 }
 
 // Mock user-attended communities
 const attendedCommunities: Community[] = [
   {
-    id: 99,
-    name: 'Neo Riders',
-    attendees: 50,
-    totalStakedKJ: '1200000n',
-    profileVideo: '/videos/neo-riders.mp4', // MP4 video for Neo Riders
-  },
-  {
     id: 100,
     name: 'Futuristic Drivers',
     attendees: 200,
-    totalStakedKJ: '6000000n',
+    totalKacToken: '6000000n',
     profileVideo: '/videos/futuristic-drivers.mp4', // MP4 video for Futuristic Drivers
-  },
-  {
-    id: 101,
-    name: 'Driver Wolves',
-    attendees: 300,
-    totalStakedKJ: '9000000n', // Fixed typo in bigint value
-    profileVideo: '/videos/wolf-drivers.mp4', // MP4 video for Driver Wolves
   },
 ]
 
@@ -47,36 +33,39 @@ const Communities: React.FC = () => {
           id: 1,
           name: 'Downtown Drivers',
           attendees: 150,
-          totalStakedKJ: '5000000n',
+          totalKacToken: '5000000n',
           profileVideo: '/videos/downtown-drivers.mp4', // MP4 video for Downtown Drivers
         },
         {
           id: 2,
           name: 'Airport Express',
           attendees: 80,
-          totalStakedKJ: '3000000n',
+          totalKacToken: '3000000n',
           profileVideo: '/videos/airport-express.mp4', // MP4 video for Airport Express
         },
         {
           id: 3,
           name: 'Night Riders',
           attendees: 60,
-          totalStakedKJ: '2000000n',
+          totalKacToken: '2000000n',
           profileVideo: '/videos/night-riders.mp4', // MP4 video for Night Riders
         },
       ]
+
       setCommunities(data)
     }
 
     fetchCommunities()
 
     setAnimate(true)
+
     const timer = setTimeout(() => setAnimate(false), 1000) // 1 second duration
+
     return () => clearTimeout(timer) // Cleanup
   }, [])
 
   return (
-    <div className="min-h-screen bg-gray-900 px-4 pt-12">
+    <div className="min-h-screen bg-gray-900 px-4 pt-12 pb-12">
       {/* Title */}
       <h2
         className="text-5xl font-cartoon text-center text-[#30ddf0] mb-8"
@@ -110,15 +99,15 @@ const Communities: React.FC = () => {
             <div>
               <h4 className="text-xl font-bold text-white">{community.name}</h4>
               <p className="text-sm text-gray-300 mt-2">
-                Attendees:{' '}
+                Drivers:{' '}
                 <span className="text-[#f4f442] font-semibold">
                   {community.attendees}
                 </span>
               </p>
               <p className="text-sm text-gray-300">
-                Total Staked KJ:{' '}
+                Total KAC:{' '}
                 <span className="text-[#ee6537]">
-                  {community.totalStakedKJ.toString()} KJ
+                  {community.totalKacToken.toString()} KJ
                 </span>
               </p>
             </div>
@@ -146,10 +135,10 @@ const Communities: React.FC = () => {
                 Community Name
               </th>
               <th className="px-4 py-3 text-left text-sm uppercase tracking-wide">
-                Attendees
+                Drivers
               </th>
               <th className="px-4 py-3 text-left text-sm uppercase tracking-wide">
-                Total Staked KJ
+                Total KAC
               </th>
             </tr>
           </thead>
@@ -184,7 +173,7 @@ const Communities: React.FC = () => {
                 {/* Total Staked KJ */}
                 <td className="border-t border-gray-700 px-6 py-4 text-center">
                   <span className="text-[#ee6537] font-medium">
-                    {community.totalStakedKJ.toString()} KJ
+                    {community.totalKacToken.toString()} KJ
                   </span>
                 </td>
               </tr>

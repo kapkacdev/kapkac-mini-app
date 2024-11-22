@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useCallback } from 'react'
 import { useTonConnectUI } from '@tonconnect/ui-react'
+import MenuTab from './MenuTab'
 
 const UserProfile: React.FC = () => {
   const [tonConnectUI] = useTonConnectUI()
@@ -73,7 +74,9 @@ const UserProfile: React.FC = () => {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center">
-      <h1 className="text-4xl font-bold mb-8">TON Connect Address</h1>
+      <h1 className="text-4xl font-bold mb-8 px-2 text-center">
+        TON Connect Address
+      </h1>
 
       {tonWalletAddress ? (
         <div className="flex flex-col items-center">
@@ -96,6 +99,9 @@ const UserProfile: React.FC = () => {
           </button>
         </div>
       )}
+
+      {/* Bottom Menu Tab */}
+      <MenuTab />
     </div>
   )
 }

@@ -1,30 +1,27 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
-import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
-import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react-swc'; // React plugin with SWC for faster builds
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(), // Enables React support with SWC compiler for optimized builds
+  ],
+  server: {
+    // Configure the development server
+    hmr: true, // Enable Hot Module Replacement (HMR)
+    watch: {
+      // Watch all files in the 'src' directory for changes
+      ignored: ['!**/src/**'],
+    },
+  },
   resolve: {
     alias: {
-      // Polyfill for 'buffer' module
-      buffer: 'buffer',
+      // Add any necessary path aliases here
+      // Example: '@components': '/src/components',
     },
   },
-  optimizeDeps: {
-    esbuildOptions: {
-      // Define global for compatibility with Node.js modules
-      define: {
-        global: 'globalThis',
-      },
-      // Enable esbuild polyfill plugins
-      plugins: [
-        NodeGlobalsPolyfillPlugin({
-          buffer: true,
-        }),
-        NodeModulesPolyfillPlugin(),
-      ],
-    },
+  build: {
+    target: 'esnext', // Use the latest JavaScript features
+    minify: 'esbuild', // Use esbuild for faster minification
   },
-})
+});
