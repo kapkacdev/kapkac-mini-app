@@ -1,60 +1,72 @@
 // src/components/Earn.tsx
-import React, { useEffect, useState } from 'react';
-import MenuTab from './MenuTab';
+import React, { useEffect, useState } from 'react'
+import MenuTab from './MenuTab'
 
 // Define the structure of User Earnings
 interface UserEarnings {
-  earnedKJ: bigint;
-  experienceLevel: number;
-  rating: number; // Out of 5
-  cancellationRate: number; // Percentage
+  earnedKJ: string
+  experienceLevel: number
+  rating: number // Out of 5
+  cancellationRate: number // Percentage
   personalEarnings: {
-    rideCompleted: bigint;
-    bonuses: bigint;
-    referrals: bigint;
-  };
+    rideCompleted: string
+    bonuses: string
+    referrals: string
+  }
 }
 
 // Define available actions to earn more points
 const earnActions = [
-  { id: 1, name: 'Complete a Ride', description: 'Earn KJ by completing rides.' },
-  { id: 2, name: 'Refer a Friend', description: 'Earn KJ for every friend you refer.' },
-  { id: 3, name: 'Participate in Events', description: 'Join events to earn bonus KJ.' },
-];
+  {
+    id: 1,
+    name: 'Complete a Ride',
+    description: 'Earn KJ by completing rides.',
+  },
+  {
+    id: 2,
+    name: 'Refer a Friend',
+    description: 'Earn KJ for every friend you refer.',
+  },
+  {
+    id: 3,
+    name: 'Participate in Events',
+    description: 'Join events to earn bonus KJ.',
+  },
+]
 
 // Earn Component
 const Earn: React.FC = () => {
   // State to hold user earnings data
-  const [userEarnings, setUserEarnings] = useState<UserEarnings | null>(null);
+  const [userEarnings, setUserEarnings] = useState<UserEarnings | null>(null)
   // State to control animation trigger
-  const [animate, setAnimate] = useState<boolean>(false);
+  const [animate, setAnimate] = useState<boolean>(false)
 
   useEffect(() => {
     // Simulate fetching user earnings data from an API or smart contract
     const fetchUserEarnings = async () => {
       // Replace this with actual data fetching logic
       const data: UserEarnings = {
-        earnedKJ: 1500000n,
+        earnedKJ: '1500000n',
         experienceLevel: 5,
         rating: 4.8,
         cancellationRate: 2.5,
         personalEarnings: {
-          rideCompleted: 1000n,
-          bonuses: 300n,
-          referrals: 200n,
+          rideCompleted: '1000n',
+          bonuses: '300n',
+          referrals: '200n',
         },
-      };
-      setUserEarnings(data);
-    };
+      }
+      setUserEarnings(data)
+    }
 
-    fetchUserEarnings();
+    fetchUserEarnings()
 
     // Trigger the slide animation on component mount
-    setAnimate(true);
+    setAnimate(true)
     // Remove the animation class after the animation duration to prevent replaying
-    const timer = setTimeout(() => setAnimate(false), 1000); // 1 second duration
-    return () => clearTimeout(timer); // Cleanup the timer on unmount
-  }, []);
+    const timer = setTimeout(() => setAnimate(false), 1000) // 1 second duration
+    return () => clearTimeout(timer) // Cleanup the timer on unmount
+  }, [])
 
   // Display a loading state while fetching data
   if (!userEarnings) {
@@ -62,52 +74,60 @@ const Earn: React.FC = () => {
       <div className="min-h-screen bg-gradient-to-r from-blue-100 to-purple-200 p-4 pt-20 flex justify-center items-center">
         <p className="text-xl text-gray-700">Loading your earnings...</p>
       </div>
-    );
+    )
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-100 to-purple-200 p-4 pt-20">
       {/* Earn Title */}
-      <h2 className="text-3xl font-bold text-center text-indigo-700 mb-8">💰 Your Earnings 💰</h2>
+      <h2 className="text-3xl font-bold text-center text-indigo-700 mb-8">
+        💰 Your Earnings 💰
+      </h2>
 
       {/* User Earnings Summary with Conditional Animation */}
-      <div
-        className={`overflow-x-auto ${
-          animate ? 'animate-slide-hint' : ''
-        }`}
-      >
+      <div className={`overflow-x-auto ${animate ? 'animate-slide-hint' : ''}`}>
         <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6 mb-6">
           {/* Grid Layout for Earnings Summary */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Total Earned KJ */}
             <div>
               <p className="text-gray-600">Total Earned KJ</p>
-              <p className="text-3xl font-semibold text-green-600">{userEarnings.earnedKJ.toString()} KJ</p>
+              <p className="text-3xl font-semibold text-green-600">
+                {userEarnings.earnedKJ.toString()} KJ
+              </p>
             </div>
 
             {/* Experience Level */}
             <div>
               <p className="text-gray-600">Experience Level</p>
-              <p className="text-3xl font-semibold text-blue-500">Level {userEarnings.experienceLevel}</p>
+              <p className="text-3xl font-semibold text-blue-500">
+                Level {userEarnings.experienceLevel}
+              </p>
             </div>
 
             {/* Rating */}
             <div>
               <p className="text-gray-600">Rating</p>
-              <p className="text-3xl font-semibold text-yellow-500">{userEarnings.rating} ⭐️</p>
+              <p className="text-3xl font-semibold text-yellow-500">
+                {userEarnings.rating} ⭐️
+              </p>
             </div>
 
             {/* Cancellation Rate */}
             <div>
               <p className="text-gray-600">Cancellation Rate</p>
-              <p className="text-3xl font-semibold text-red-500">{userEarnings.cancellationRate}%</p>
+              <p className="text-3xl font-semibold text-red-500">
+                {userEarnings.cancellationRate}%
+              </p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Actions to Earn More */}
-      <h3 className="text-2xl font-semibold text-center text-indigo-700 mb-6">🚀 Actions to Earn More 🚀</h3>
+      <h3 className="text-2xl font-semibold text-center text-indigo-700 mb-6">
+        🚀 Actions to Earn More 🚀
+      </h3>
       <div className="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
         {earnActions.map((action) => (
           <div
@@ -123,7 +143,9 @@ const Earn: React.FC = () => {
                 {action.id === 2 && '👥'}
                 {action.id === 3 && '🎉'}
               </div>
-              <h4 className="text-xl font-medium text-gray-800 mb-2">{action.name}</h4>
+              <h4 className="text-xl font-medium text-gray-800 mb-2">
+                {action.name}
+              </h4>
               <p className="text-gray-600">{action.description}</p>
             </div>
             {/* Action Button */}
@@ -142,7 +164,7 @@ const Earn: React.FC = () => {
       {/* Bottom Menu Tab */}
       <MenuTab />
     </div>
-  );
-};
+  )
+}
 
-export default Earn;
+export default Earn

@@ -1,43 +1,43 @@
-import React, { useEffect, useState } from "react";
-import MenuTab from "./MenuTab";
+import React, { useEffect, useState } from 'react'
+import MenuTab from './MenuTab'
 
 // Define the structure of a Community
 interface Community {
-  id: number;
-  name: string;
-  attendees: number;
-  totalStakedKJ: bigint;
-  profileVideo: string; // Added profile video field
+  id: number
+  name: string
+  attendees: number
+  totalStakedKJ: string
+  profileVideo: string // Added profile video field
 }
 
 // Mock user-attended communities
 const attendedCommunities: Community[] = [
   {
     id: 99,
-    name: "Neo Riders",
+    name: 'Neo Riders',
     attendees: 50,
-    totalStakedKJ: 1200000n,
-    profileVideo: "/videos/neo-riders.mp4", // MP4 video for Neo Riders
+    totalStakedKJ: '1200000n',
+    profileVideo: '/videos/neo-riders.mp4', // MP4 video for Neo Riders
   },
   {
     id: 100,
-    name: "Futuristic Drivers",
+    name: 'Futuristic Drivers',
     attendees: 200,
-    totalStakedKJ: 6000000n,
-    profileVideo: "/videos/futuristic-drivers.mp4", // MP4 video for Futuristic Drivers
+    totalStakedKJ: '6000000n',
+    profileVideo: '/videos/futuristic-drivers.mp4', // MP4 video for Futuristic Drivers
   },
   {
     id: 101,
-    name: "Driver Wolves",
+    name: 'Driver Wolves',
     attendees: 300,
-    totalStakedKJ: 9000000n,
-    profileVideo: "/videos/wolf-drivers.mp4", // MP4 video for Driver Wolves
+    totalStakedKJ: '9000000n', // Fixed typo in bigint value
+    profileVideo: '/videos/wolf-drivers.mp4', // MP4 video for Driver Wolves
   },
-];
+]
 
 const Communities: React.FC = () => {
-  const [communities, setCommunities] = useState<Community[]>([]);
-  const [animate, setAnimate] = useState<boolean>(false);
+  const [communities, setCommunities] = useState<Community[]>([])
+  const [animate, setAnimate] = useState<boolean>(false)
 
   useEffect(() => {
     // Simulate fetching data from an API or smart contract
@@ -45,48 +45,51 @@ const Communities: React.FC = () => {
       const data: Community[] = [
         {
           id: 1,
-          name: "Downtown Drivers",
+          name: 'Downtown Drivers',
           attendees: 150,
-          totalStakedKJ: 5000000n,
-          profileVideo: "/videos/downtown-drivers.mp4", // MP4 video for Downtown Drivers
+          totalStakedKJ: '5000000n',
+          profileVideo: '/videos/downtown-drivers.mp4', // MP4 video for Downtown Drivers
         },
         {
           id: 2,
-          name: "Airport Express",
+          name: 'Airport Express',
           attendees: 80,
-          totalStakedKJ: 3000000n,
-          profileVideo: "/videos/airport-express.mp4", // MP4 video for Airport Express
+          totalStakedKJ: '3000000n',
+          profileVideo: '/videos/airport-express.mp4', // MP4 video for Airport Express
         },
         {
           id: 3,
-          name: "Night Riders",
+          name: 'Night Riders',
           attendees: 60,
-          totalStakedKJ: 2000000n,
-          profileVideo: "/videos/night-riders.mp4", // MP4 video for Night Riders
+          totalStakedKJ: '2000000n',
+          profileVideo: '/videos/night-riders.mp4', // MP4 video for Night Riders
         },
-      ];
-      setCommunities(data);
-    };
+      ]
+      setCommunities(data)
+    }
 
-    fetchCommunities();
+    fetchCommunities()
 
-    setAnimate(true);
-    const timer = setTimeout(() => setAnimate(false), 1000); // 1 second duration
-    return () => clearTimeout(timer); // Cleanup
-  }, []);
+    setAnimate(true)
+    const timer = setTimeout(() => setAnimate(false), 1000) // 1 second duration
+    return () => clearTimeout(timer) // Cleanup
+  }, [])
 
   return (
     <div className="min-h-screen bg-gray-900 px-4 pt-12">
       {/* Title */}
       <h2
         className="text-5xl font-cartoon text-center text-[#30ddf0] mb-8"
-        style={{ textShadow: "2px 2px 8px rgba(0, 229, 255, 0.6)" }}
+        style={{ textShadow: '2px 2px 8px rgba(0, 229, 255, 0.6)' }}
       >
         Communities
       </h2>
 
       {/* User-Attended Communities */}
-      <h3 className="text-2xl text-[#f4f442] mb-4" style={{ textShadow: "2px 2px 8px rgba(0, 229, 255, 0.6)" }}>
+      <h3
+        className="text-2xl text-[#f4f442] mb-4"
+        style={{ textShadow: '2px 2px 8px rgba(0, 229, 255, 0.6)' }}
+      >
         My Communities
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -105,17 +108,15 @@ const Communities: React.FC = () => {
             ></video>
             {/* Community Info */}
             <div>
-              <h4 className="text-xl font-bold text-white">
-                {community.name}
-              </h4>
+              <h4 className="text-xl font-bold text-white">{community.name}</h4>
               <p className="text-sm text-gray-300 mt-2">
-                Attendees:{" "}
+                Attendees:{' '}
                 <span className="text-[#f4f442] font-semibold">
                   {community.attendees}
                 </span>
               </p>
               <p className="text-sm text-gray-300">
-                Total Staked KJ:{" "}
+                Total Staked KJ:{' '}
                 <span className="text-[#ee6537]">
                   {community.totalStakedKJ.toString()} KJ
                 </span>
@@ -126,12 +127,15 @@ const Communities: React.FC = () => {
       </div>
 
       {/* Communities Table */}
-      <h3 className="text-2xl text-[#f4f442] mb-6" style={{ textShadow: "2px 2px 8px rgba(0, 229, 255, 0.6)" }}>
+      <h3
+        className="text-2xl text-[#f4f442] mb-6"
+        style={{ textShadow: '2px 2px 8px rgba(0, 229, 255, 0.6)' }}
+      >
         Available Communities
       </h3>
       <div
         className={`overflow-x-auto rounded-xl ${
-          animate ? "animate-slide-hint" : ""
+          animate ? 'animate-slide-hint' : ''
         }`}
       >
         <table className="min-w-full bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800 shadow-md rounded-lg">
@@ -163,7 +167,7 @@ const Communities: React.FC = () => {
                     <span className="font-medium text-[#00E5FF]">
                       {community.name}
                     </span>
-                    
+
                     <span className="text-sm text-gray-500">
                       Active Drivers: {community.attendees}
                     </span>
@@ -192,7 +196,7 @@ const Communities: React.FC = () => {
       {/* Bottom Menu Tab */}
       <MenuTab />
     </div>
-  );
-};
+  )
+}
 
-export default Communities;
+export default Communities

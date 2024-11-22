@@ -1,4 +1,4 @@
-// src/hooks/useTonWallet.ts
+// todo: remove this file and only use one hook to manage users' blockchain activities
 
 import { useEffect, useState } from 'react';
 import { tonConnect } from '../tonConnect';

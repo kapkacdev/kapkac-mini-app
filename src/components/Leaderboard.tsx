@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import MenuTab from "./MenuTab";
-import driverFront from "../assets/sketches/driver_front.svg"; // Import the SVG as a regular image
+import React, { useEffect, useState } from 'react'
+import MenuTab from './MenuTab'
+import driverFront from '../assets/sketches/driver_front.svg' // Import the SVG as a regular image
 
 // Define the structure of a Leaderboard Entry
 interface LeaderboardEntry {
-  rank: number;
-  username: string;
-  totalEarnedKJ: bigint;
-  experienceLevel: number;
-  rating: number;
+  rank: number
+  username: string
+  totalEarnedKJ: string
+  experienceLevel: number
+  rating: number
 }
 
 const Leaderboard: React.FC = () => {
@@ -16,53 +16,53 @@ const Leaderboard: React.FC = () => {
   const leaderboard: LeaderboardEntry[] = [
     {
       rank: 1,
-      username: "TopDriver123",
-      totalEarnedKJ: 5000000n,
+      username: 'TopDriver123',
+      totalEarnedKJ: '5000000n',
       experienceLevel: 10,
       rating: 5.0,
     },
     {
       rank: 2,
-      username: "Speedster89",
-      totalEarnedKJ: 4500000n,
+      username: 'Speedster89',
+      totalEarnedKJ: '4500000n',
       experienceLevel: 9,
       rating: 4.9,
     },
     {
       rank: 3,
-      username: "NightRider",
-      totalEarnedKJ: 4000000n,
+      username: 'NightRider',
+      totalEarnedKJ: '4000000n',
       experienceLevel: 8,
       rating: 4.8,
     },
-  ];
+  ]
 
   // State to control the animation trigger
-  const [animate, setAnimate] = useState<boolean>(false);
+  const [animate, setAnimate] = useState<boolean>(false)
 
   useEffect(() => {
     // Trigger the slide animation on component mount
-    setAnimate(true);
+    setAnimate(true)
     // Remove the animation class after the animation duration to prevent replaying
-    const timer = setTimeout(() => setAnimate(false), 1000); // 1 second duration
-    return () => clearTimeout(timer); // Cleanup the timer on unmount
-  }, []);
+    const timer = setTimeout(() => setAnimate(false), 1000) // 1 second duration
+    return () => clearTimeout(timer) // Cleanup the timer on unmount
+  }, [])
 
   return (
     <div className="min-h-screen bg-gray-900 px-4 pt-12">
       {/* Leaderboard Title */}
       <h2
         className="text-5xl font-cartoon text-center text-[#30ddf0] mb-8 gap-5"
-        style={{ textShadow: "2px 2px 8px rgba(0, 229, 255, 0.6)" }}
+        style={{ textShadow: '2px 2px 8px rgba(0, 229, 255, 0.6)' }}
       >
-         Leaderboard 
-         <p>🏆</p>
-          </h2>
+        Leaderboard
+        <p>🏆</p>
+      </h2>
 
       {/* Table Container */}
       <div
         className={`overflow-x-auto rounded-xl ${
-          animate ? "animate-slide-hint" : ""
+          animate ? 'animate-slide-hint' : ''
         }`}
       >
         <table className="min-w-full bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800 shadow-md rounded-lg">
@@ -110,7 +110,8 @@ const Leaderboard: React.FC = () => {
                         {entry.username}
                       </span>
                       <span className="text-sm text-gray-300 block mt-1">
-                        Level {entry.experienceLevel} | ⭐ {entry.rating.toFixed(1)}
+                        Level {entry.experienceLevel} | ⭐{' '}
+                        {entry.rating.toFixed(1)}
                       </span>
                     </div>
                   </div>
@@ -131,7 +132,7 @@ const Leaderboard: React.FC = () => {
       {/* Bottom Menu Tab */}
       <MenuTab />
     </div>
-  );
-};
+  )
+}
 
-export default Leaderboard;
+export default Leaderboard
