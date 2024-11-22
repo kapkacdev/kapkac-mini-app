@@ -12,10 +12,12 @@ import Earn from './components/Earn'
 import Leaderboard from './components/Leaderboard'
 import UserProfile from './components/UserProfile'
 import { TonConnectUIProvider } from '@tonconnect/ui-react' // Import the provider
+import DriverCommunity from './components/DriverCommunity'
 
 const AppContent: React.FC = () => {
-  const { currentScreen } = useNavigation()
+  const { currentScreen, screenProps } = useNavigation()
 
+  // todo: use nested screens for community pages
   const renderScreen = () => {
     switch (currentScreen) {
       case 'Game':
@@ -28,6 +30,16 @@ const AppContent: React.FC = () => {
         return <Leaderboard />
       case 'Profile':
         return <UserProfile />
+      case 'DriverCommunity':
+        return (
+          <DriverCommunity
+            communityName={
+              typeof screenProps?.communityName === 'string'
+                ? screenProps.communityName
+                : ''
+            }
+          />
+        )
       case 'Menu':
       default:
         return (

@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import MenuTab from './MenuTab'
+import Button from './Button'
+import { FaArrowRight } from 'react-icons/fa'
+import { useNavigation } from '../context/NavigationContext'
 
 // Define the structure of a Community
 interface Community {
@@ -16,7 +19,7 @@ const attendedCommunities: Community[] = [
     id: 100,
     name: 'Futuristic Drivers',
     attendees: 200,
-    totalKacToken: '6000000n',
+    totalKacToken: '60234220',
     profileVideo: '/videos/futuristic-drivers.mp4', // MP4 video for Futuristic Drivers
   },
 ]
@@ -24,6 +27,7 @@ const attendedCommunities: Community[] = [
 const Communities: React.FC = () => {
   const [communities, setCommunities] = useState<Community[]>([])
   const [animate, setAnimate] = useState<boolean>(false)
+  const { navigateTo } = useNavigation()
 
   useEffect(() => {
     // Simulate fetching data from an API or smart contract
@@ -33,39 +37,38 @@ const Communities: React.FC = () => {
           id: 1,
           name: 'Downtown Drivers',
           attendees: 150,
-          totalKacToken: '5000000n',
+          totalKacToken: '50000322',
           profileVideo: '/videos/downtown-drivers.mp4', // MP4 video for Downtown Drivers
         },
         {
           id: 2,
           name: 'Airport Express',
           attendees: 80,
-          totalKacToken: '3000000n',
+          totalKacToken: '3770090',
           profileVideo: '/videos/airport-express.mp4', // MP4 video for Airport Express
         },
         {
           id: 3,
           name: 'Night Riders',
           attendees: 60,
-          totalKacToken: '2000000n',
+          totalKacToken: '20323',
           profileVideo: '/videos/night-riders.mp4', // MP4 video for Night Riders
         },
       ]
-
       setCommunities(data)
     }
 
     fetchCommunities()
 
     setAnimate(true)
-
     const timer = setTimeout(() => setAnimate(false), 1000) // 1 second duration
-
     return () => clearTimeout(timer) // Cleanup
   }, [])
 
+  // todo: replace KAC text with KAC token icon everywhere in the code
+
   return (
-    <div className="min-h-screen bg-gray-900 px-4 pt-12 pb-12">
+    <div className="min-h-screen bg-gray-900 px-4 pt-12">
       {/* Title */}
       <h2
         className="text-5xl font-cartoon text-center text-[#30ddf0] mb-8"
@@ -99,17 +102,30 @@ const Communities: React.FC = () => {
             <div>
               <h4 className="text-xl font-bold text-white">{community.name}</h4>
               <p className="text-sm text-gray-300 mt-2">
-                Drivers:{' '}
+                Attendees:{' '}
                 <span className="text-[#f4f442] font-semibold">
                   {community.attendees}
                 </span>
               </p>
               <p className="text-sm text-gray-300">
-                Total KAC:{' '}
+                Total:{' '}
                 <span className="text-[#ee6537]">
-                  {community.totalKacToken.toString()} KJ
+                  {community.totalKacToken.toString()} KAC
                 </span>
               </p>
+
+              <Button
+                label="Community Page"
+                size="small"
+                variant="primary"
+                icon={<FaArrowRight />}
+                iconPosition="right"
+                onClick={() =>
+                  navigateTo('DriverCommunity', {
+                    communityName: community.name,
+                  })
+                }
+              />
             </div>
           </div>
         ))}
@@ -138,7 +154,7 @@ const Communities: React.FC = () => {
                 Drivers
               </th>
               <th className="px-4 py-3 text-left text-sm uppercase tracking-wide">
-                Total KAC
+                Total
               </th>
             </tr>
           </thead>
@@ -170,10 +186,10 @@ const Communities: React.FC = () => {
                   </span>
                 </td>
 
-                {/* Total Staked KJ */}
+                {/* Total Pool */}
                 <td className="border-t border-gray-700 px-6 py-4 text-center">
                   <span className="text-[#ee6537] font-medium">
-                    {community.totalKacToken.toString()} KJ
+                    {community.totalKacToken.toString()} KAC
                   </span>
                 </td>
               </tr>
