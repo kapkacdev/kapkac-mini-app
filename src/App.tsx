@@ -1,4 +1,4 @@
-// src/App.tsx
+"use client";
 
 import React from 'react';
 import Background from './components/Background';
@@ -10,6 +10,7 @@ import Communities from './components/Communities';
 import Earn from './components/Earn';
 import Leaderboard from './components/Leaderboard';
 import UserProfile from './components/UserProfile';
+import { TonConnectUIProvider } from '@tonconnect/ui-react'; // Import the provider
 
 const AppContent: React.FC = () => {
   const { currentScreen } = useNavigation();
@@ -59,9 +60,11 @@ const AppContent: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <NavigationProvider>
-      <AppContent />
-    </NavigationProvider>
+    <TonConnectUIProvider manifestUrl={'https://856d-188-119-39-135.ngrok-free.app/tonconnect-manifest.json'}>
+      <NavigationProvider>
+        <AppContent />
+      </NavigationProvider>
+    </TonConnectUIProvider>
   );
 };
 
