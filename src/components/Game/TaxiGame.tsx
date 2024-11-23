@@ -1,5 +1,6 @@
 // src/components/Game/TaxiGame.tsx
 import React, { useRef, useEffect } from 'react'
+import MenuTab from '../MenuTab' // Import the MenuTab component
 
 const TaxiGame: React.FC = () => {
   const iframeRef = useRef<HTMLIFrameElement>(null)
@@ -25,14 +26,20 @@ const TaxiGame: React.FC = () => {
   }, [])
 
   return (
-    <div style={{ width: '100%', height: '100vh', border: 'none' }}>
+    <div className="relative w-full h-screen">
+      {/* Fullscreen Game Iframe */}
       <iframe
         ref={iframeRef}
         src={`/taxi-game.html`}
         title="Taxi Game"
-        style={{ width: '100%', height: '100%', border: 'none' }}
+        className="w-full h-full border-none"
         allowFullScreen
       ></iframe>
+
+      {/* Menu Tab at the Bottom */}
+      <div className="absolute bottom-0 left-0 w-full">
+        <MenuTab hideLabels={true} />
+      </div>
     </div>
   )
 }

@@ -6,7 +6,11 @@ interface MenuItem {
   icon: string // Path to the PNG icon
 }
 
-const MenuTab: React.FC = () => {
+interface MenuTabProps {
+  hideLabels?: boolean // Optional prop to hide labels
+}
+
+const MenuTab: React.FC<MenuTabProps> = ({ hideLabels = false }) => {
   const { navigateTo } = useNavigation()
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null)
 
@@ -34,13 +38,17 @@ const MenuTab: React.FC = () => {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 bg-stone-800 rounded-t-2xl shadow-inner shadow-[#4D00FF] flex justify-evenly items-center py-2 z-10 border-t border-stone-400"
+      className={`fixed bottom-0 left-0 right-0 bg-[#0c0224] rounded-t-2xl shadow-inner shadow-[#4D00FF] flex justify-evenly items-center z-10 border-t border-stone-400 transition-all duration-300 ${
+        hideLabels ? 'py-2 h-16' : 'py-4 h-20'
+      }`}
       aria-label="Main navigation"
     >
       {menuItems.map((item, index) => (
         <button
           key={item.label}
-          className={`flex flex-col items-center justify-center w-16 h-16 transition-all duration-300 ${
+          className={`flex ${
+            hideLabels ? 'items-center' : 'flex-col items-center'
+          } justify-center w-16 h-full transition-all duration-300 ${
             index === highlightedIndex ? 'scale-110' : 'scale-100'
           } hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2`}
           onClick={() => handleItemClick(item.label)}
@@ -49,12 +57,14 @@ const MenuTab: React.FC = () => {
           <img
             src={item.icon}
             alt=""
-            className="w-10 h-10 mb-1"
+            className={`w-10 ${hideLabels ? '' : 'mb-1'}`}
             aria-hidden="true"
           />
-          <span className="text-xs text-stone-200 hover:text-white">
-            {item.label}
-          </span>
+          {!hideLabels && (
+            <span className="text-xs text-stone-200 hover:text-white">
+              {item.label}
+            </span>
+          )}
         </button>
       ))}
     </nav>
