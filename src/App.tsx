@@ -76,7 +76,7 @@ const App: React.FC = () => {
       <div className="w-full max-w-[375px] bg-white">
         <TonConnectUIProvider
           manifestUrl={
-            'https://d607-188-119-39-135.ngrok-free.app/tonconnect-manifest.json'
+            'https://main.d3gagyjlto069s.amplifyapp.com/tonconnect-manifest.json'
           }
         >
           <NavigationProvider>
