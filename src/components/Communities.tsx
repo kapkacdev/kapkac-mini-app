@@ -65,10 +65,8 @@ const Communities: React.FC = () => {
     return () => clearTimeout(timer) // Cleanup
   }, [])
 
-  // todo: replace KAC text with KAC token icon everywhere in the code
-
   return (
-    <div className="min-h-screen bg-gray-900 px-4 pt-12">
+    <div className="min-h-screen bg-gray-900 px-6 pt-12 pb-10">
       {/* Title */}
       <h2
         className="text-5xl font-cartoon text-center text-[#30ddf0] mb-8"
@@ -79,8 +77,8 @@ const Communities: React.FC = () => {
 
       {/* User-Attended Communities */}
       <h3
-        className="text-2xl text-[#f4f442] mb-4"
-        style={{ textShadow: '2px 2px 8px rgba(0, 229, 255, 0.6)' }}
+        className="text-2xl text-white mb-4"
+        style={{ textShadow: '1px 1px 4px rgba(255, 255, 255, 0.4)' }}
       >
         My Communities
       </h3>
@@ -88,7 +86,7 @@ const Communities: React.FC = () => {
         {attendedCommunities.map((community) => (
           <div
             key={community.id}
-            className="bg-gradient-to-br from-[#00E5FF] to-[#4D00FF] p-6 rounded-xl shadow-xl transform hover:scale-105 transition-transform duration-200 flex items-center"
+            className="bg-gradient-to-br from-[#4D00FF] to-[#200072] p-6 rounded-2xl shadow-xl transform hover:scale-105 transition-transform duration-200 flex items-center"
           >
             {/* Profile Video */}
             <video
@@ -103,14 +101,14 @@ const Communities: React.FC = () => {
               <h4 className="text-xl font-bold text-white">{community.name}</h4>
               <p className="text-sm text-gray-300 mt-2">
                 Attendees:{' '}
-                <span className="text-[#f4f442] font-semibold">
+                <span className="text-yellow-400 font-semibold">
                   {community.attendees}
                 </span>
               </p>
               <p className="text-sm text-gray-300">
                 Total:{' '}
-                <span className="text-[#ee6537]">
-                  {community.totalKacToken.toString()} KAC
+                <span className="text-orange-400">
+                  {community.totalKacToken} KAC
                 </span>
               </p>
 
@@ -133,8 +131,8 @@ const Communities: React.FC = () => {
 
       {/* Communities Table */}
       <h3
-        className="text-2xl text-[#f4f442] mb-6"
-        style={{ textShadow: '2px 2px 8px rgba(0, 229, 255, 0.6)' }}
+        className="text-2xl text-white mb-6"
+        style={{ textShadow: '1px 1px 4px rgba(255, 255, 255, 0.4)' }}
       >
         Available Communities
       </h3>
@@ -143,7 +141,7 @@ const Communities: React.FC = () => {
           animate ? 'animate-slide-hint' : ''
         }`}
       >
-        <table className="min-w-full bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800 shadow-md rounded-lg">
+        <table className="min-w-full bg-gradient-to-b from-gray-800 via-gray-900 to-gray-800 shadow-md rounded-lg">
           {/* Table Header */}
           <thead>
             <tr className="bg-[#4D00FF] text-white">
@@ -181,15 +179,15 @@ const Communities: React.FC = () => {
 
                 {/* Attendees */}
                 <td className="font-medium border-t border-gray-700 px-6 py-4 text-center">
-                  <span className="text-[#f4f442] font-medium">
+                  <span className="text-white font-medium">
                     {community.attendees}
                   </span>
                 </td>
 
                 {/* Total Pool */}
                 <td className="border-t border-gray-700 px-6 py-4 text-center">
-                  <span className="text-[#ee6537] font-medium">
-                    {community.totalKacToken.toString()} KAC
+                  <span className="text-orange-400 font-medium">
+                    {community.totalKacToken} KAC
                   </span>
                 </td>
               </tr>
