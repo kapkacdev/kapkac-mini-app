@@ -1,5 +1,3 @@
-import 'phaser';
-
 class MainScene extends Phaser.Scene {
     constructor() {
         super({ key: 'MainScene' });
@@ -86,20 +84,20 @@ class MainScene extends Phaser.Scene {
         this.load.image('steering-wheel', 'assets/steering-wheel.png');
 
         // Load traffic car assets
-        this.load.image('car1', 'assets/car1.png');
-        this.load.image('car2', 'assets/car2.png');
-        this.load.image('car3', 'assets/car3.png');
-        this.load.image('car4', 'assets/car4.png');
+        this.load.image('car1', '/assets/car1.png');
+        this.load.image('car2', '/assets/car2.png');
+        this.load.image('car3', '/assets/car3.png');
+        this.load.image('car4', '/assets/car4.png');
 
         // Load tree variants
-        this.load.image('tree1', 'assets/tree1.png');
-        this.load.image('tree2', 'assets/tree2.png');
-        this.load.image('tree3', 'assets/tree3.png');
-        this.load.image('tree4', 'assets/tree4.png');
+        this.load.image('tree1', '/assets/tree1.png');
+        this.load.image('tree2', '/assets/tree2.png');
+        this.load.image('tree3', '/assets/tree3.png');
+        this.load.image('tree4', '/assets/tree4.png');
 
         // Load bush variants
-        this.load.image('bush1', 'assets/bush1.png');
-        this.load.image('bush2', 'assets/bush2.png');
+        this.load.image('bush1', '/assets/bush1.png');
+        this.load.image('bush2', '/assets/bush2.png');
 
         this.load.on('filecomplete-spritesheet-coin', function (key, type, data) {
             console.log('Coin spritesheet loaded:', { key, type, data });
@@ -109,7 +107,7 @@ class MainScene extends Phaser.Scene {
             console.error('Error loading file:', file.src);
         });
 
-        this.load.spritesheet('coin', 'assets/coin.gif', {
+        this.load.spritesheet('coin', '/assets/coin.gif', {
             frameWidth: 180,
             frameHeight: 180
         });
@@ -817,8 +815,13 @@ class MainScene extends Phaser.Scene {
 
 const config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    parent: 'game-container',
+    width: window.innerWidth,
+    height: window.innerHeight,
+    scale: {
+        mode: Phaser.Scale.RESIZE,
+        autoCenter: Phaser.Scale.CENTER_BOTH
+    },
     physics: {
         default: 'arcade',
         arcade: {
@@ -829,4 +832,20 @@ const config = {
     scene: MainScene
 };
 
-const game = new Phaser.Game(config);
+window.addEventListener('load', () => {
+    const game = new Phaser.Game(config);
+});
+
+window.addEventListener('message', (event) => {
+    // Validate the origin of the message
+    if (event.origin !== window.location.origin) return;
+
+    const { type, payload } = event.data;
+
+    if (type === 'START_GAME') {
+        // Handle the start game event
+        console.log('Start game received:', payload);
+    }
+
+    // Add more event handlers as needed
+});

@@ -1,0 +1,29 @@
+<!-- public/taxi-game.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Taxi Game</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scrollbars */
+            background-color: #000; /* Optional: Set a background color */
+        }
+        #game-container {
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+    <!-- Include Phaser via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.js"></script>
+    <!-- Include WebFont Loader if used in your game -->
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+</head>
+<body>
+    <div id="game-container"></div>
+    <!-- Include the Phaser game script -->
+    <script src="taxi-game.js"></script>
+</body>
+</html>
