@@ -6,7 +6,7 @@ import MenuTab from './components/MenuTab'
 import backgroundVideo from './assets/vecteezy_aerial-view-of-the-bosphorus-bridge-in-istanbul-turkey_51072378.mp4'
 import transparentLogo from '/KAPKAC-logo-transparent.png'
 import { NavigationProvider, useNavigation } from './context/NavigationContext'
-import TaxiGame from './components/Game/TaxiGame'
+import TaxiGame from './components/Game/Game'
 import Communities from './components/Communities'
 import Earn from './components/Earn'
 import Leaderboard from './components/Leaderboard'
@@ -21,7 +21,7 @@ const AppContent: React.FC = () => {
   const renderScreen = () => {
     switch (currentScreen) {
       case 'Game':
-        return <TaxiGame />
+        return <TaxiGame walletAddress="34565768798763fgy6756t7yr6t7" />
       case 'Communities':
         return <Communities />
       case 'Earn':

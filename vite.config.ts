@@ -1,10 +1,11 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc'; // React plugin with SWC for faster builds
+import svgr from 'vite-plugin-svgr'; // Plugin for importing SVG files as React components
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    react(), // Enables React support with SWC compiler for optimized builds
+    react(), svgr() // Enables React support with SWC compiler for optimized builds
   ],
   server: {
     // Configure the development server
@@ -24,4 +25,5 @@ export default defineConfig({
     target: 'esnext', // Use the latest JavaScript features
     minify: 'esbuild', // Use esbuild for faster minification
   },
+  
 });
