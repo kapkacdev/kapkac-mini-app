@@ -1,9 +1,14 @@
 class MainScene extends Phaser.Scene {
     constructor() {
         super({ key: 'MainScene' });
-        this.GAME_WIDTH = 800;
-        this.GAME_HEIGHT = 600;
-        this.ROAD_WIDTH = 300;
+
+        // Update size: Set game dimensions to match the screen size dynamically
+        this.GAME_WIDTH = window.innerWidth;
+        this.GAME_HEIGHT = window.innerHeight;
+
+        // Update size: Adjust road width relative to the screen size
+        this.ROAD_WIDTH = this.GAME_WIDTH * 0.4;
+
         this.GRASS_COLOR = 0x2ecc71;
         this.ROAD_COLOR = 0x34495e;
         this.LANE_COLOR = 0xf1c40f;
@@ -29,7 +34,9 @@ class MainScene extends Phaser.Scene {
 
         this.TURN_SPEED_REDUCTION = 1.0;
 
-        this.BASE_PLAYER_Y = this.GAME_HEIGHT - 100;  // Original Y position
+        // Update size: Adjust base player position relative to screen height
+        this.BASE_PLAYER_Y = this.GAME_HEIGHT * 0.85;
+
         this.MAX_FORWARD_OFFSET = 30;  // Maximum forward movement
 
         // Traffic constants
@@ -173,19 +180,20 @@ class MainScene extends Phaser.Scene {
         );
         this.roadLayer.add(road);
 
-        // Create lane markers for 3 lanes
+        // Create lane markers for dividing the road into 3 sections
         this.laneMarkers = this.add.group();
-        const markerCount = 10;
-        const markerHeight = 40;
-        const markerWidth = 6;
-        const gap = 60;
 
-        // Create two sets of lane markers
-        [-1, 1].forEach(offset => {
-            for (let i = 0; i < markerCount; i++) {
+        const markerHeight = this.GAME_HEIGHT / 15; // Marker height relative to the screen height
+        const markerWidth = this.ROAD_WIDTH / 30; // Marker width relative to the road width
+        const gap = markerHeight * 1.5; // Gap between markers for consistent spacing
+        const totalHeight = this.GAME_HEIGHT + markerHeight + gap; // Total height to cover
+
+        // Correct placement of lane markers to divide the road into 3 sections
+        [1 / 3, 2 / 3].forEach((fraction) => {
+            for (let y = -totalHeight; y < totalHeight; y += (markerHeight + gap)) {
                 const marker = this.add.rectangle(
-                    this.GAME_WIDTH / 2 + (offset * this.LANE_WIDTH / 3),
-                    -markerHeight + (i * (markerHeight + gap)),
+                    (this.GAME_WIDTH - this.ROAD_WIDTH) / 2 + fraction * this.ROAD_WIDTH, // X position aligned with road lanes
+                    y, // Y position with consistent spacing
                     markerWidth,
                     markerHeight,
                     this.LANE_COLOR
@@ -303,6 +311,7 @@ class MainScene extends Phaser.Scene {
         this.player.body.setCollideWorldBounds(true);
 
         const roadLeftBound = (this.GAME_WIDTH - this.ROAD_WIDTH) / 2;
+        // todo: add roadRightBound
         const roadRightBound = roadLeftBound + this.ROAD_WIDTH;
 
         this.player.body.setBoundsRectangle(new Phaser.Geom.Rectangle(
