@@ -55,8 +55,7 @@ const Leaderboard: React.FC = () => {
         className="text-5xl font-cartoon text-center text-[#30ddf0] mb-8 gap-5"
         style={{ textShadow: '2px 2px 8px rgba(0, 229, 255, 0.6)' }}
       >
-        Leaderboard
-        <p>🏆</p>
+        Game Leaderboard
       </h2>
 
       {/* Table Container */}
