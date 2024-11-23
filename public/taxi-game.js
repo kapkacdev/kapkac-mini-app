@@ -7,7 +7,8 @@ class MainScene extends Phaser.Scene {
         this.GAME_HEIGHT = window.innerHeight;
 
         // Update size: Adjust road width relative to the screen size
-        this.ROAD_WIDTH = this.GAME_WIDTH * 0.4;
+        this.ROAD_WIDTH = this.GAME_WIDTH * 0.6;
+
 
         this.GRASS_COLOR = 0x2ecc71;
         this.ROAD_COLOR = 0x34495e;
@@ -338,7 +339,60 @@ class MainScene extends Phaser.Scene {
             callbackScope: this,
             loop: true
         });
+
+        // Add touch controls
+        this.addTouchControls();
     }
+
+
+    addTouchControls() {
+        // Steering Area: Covers the bottom portion of the screen for interaction
+        const steeringArea = this.add.rectangle(
+            this.GAME_WIDTH / 2,
+            this.GAME_HEIGHT / 2,
+            this.GAME_WIDTH,
+            this.GAME_HEIGHT,
+            0x000000,
+            0 // Fully transparent
+        ).setInteractive();
+
+        let isSteering = false;
+        let lastSteeringX = null;
+
+        // Pointer down: Start accelerating and enable steering
+        steeringArea.on('pointerdown', (pointer) => {
+            this.isAccelerating = true; // Start accelerating
+            isSteering = true;
+            lastSteeringX = pointer.x; // Track initial pointer position for steering
+        });
+
+        // Pointer move: Adjust steering based on horizontal drag
+        steeringArea.on('pointermove', (pointer) => {
+            if (isSteering && lastSteeringX !== null) {
+                const deltaX = pointer.x - lastSteeringX; // Calculate horizontal movement
+                const steeringSensitivity = 0.005; // Adjust sensitivity for steering
+                this.STEERING_SPEED = deltaX * steeringSensitivity; // Update steering speed
+                lastSteeringX = pointer.x; // Update for continuous movement
+            }
+        });
+
+        // Pointer up: Stop accelerating and disable steering
+        steeringArea.on('pointerup', () => {
+            this.isAccelerating = false; // Stop accelerating
+            isSteering = false;
+            lastSteeringX = null;
+            this.STEERING_SPEED = 0; // Reset steering speed when input ends
+        });
+
+        // Pointer out: Stop accelerating and reset steering when touch leaves the screen
+        steeringArea.on('pointerout', () => {
+            this.isAccelerating = false; // Stop accelerating
+            isSteering = false;
+            lastSteeringX = null;
+            this.STEERING_SPEED = 0; // Reset steering speed when input ends
+        });
+    }
+
 
     updateTrafficLimit() {
         // Randomly set new limit between min and max
@@ -618,105 +672,86 @@ class MainScene extends Phaser.Scene {
     }
 
     updateCarPhysics() {
-        // Update speed with smoother acceleration/deceleration
-        if (this.cursors.up.isDown) {
+        // Handle keyboard input for acceleration and braking
+        if (this.cursors.up.isDown || this.isAccelerating) {
             this.carSpeed += this.CAR_ACCELERATION;
-        } else if (this.cursors.down.isDown) {
+        } else if (this.cursors.down.isDown || this.isBraking) {
             this.carSpeed -= this.CAR_ACCELERATION;
         } else {
-            // Apply deceleration only when no input
+            // Apply deceleration when no input is provided
             this.carSpeed *= this.CAR_DECELERATION;
             if (Math.abs(this.carSpeed) < 0.1) this.carSpeed = 0;
         }
 
-        // Clamp speed between MIN_SPEED and MAX_SPEED
+        // Clamp car speed to its min and max values
         this.carSpeed = Phaser.Math.Clamp(this.carSpeed, this.MIN_SPEED, this.MAX_SPEED);
 
-        // Calculate current maximum steering angle based on speed
-        const currentMaxSteering = this.calculateMaxSteering();
-
-        // Handle steering input with auto-straigtening
+        // Handle keyboard input for steering
         if (this.cursors.left.isDown) {
             this.STEERING_SPEED -= this.STEERING_ACCELERATION * Math.abs(this.carSpeed / this.MAX_SPEED);
         } else if (this.cursors.right.isDown) {
             this.STEERING_SPEED += this.STEERING_ACCELERATION * Math.abs(this.carSpeed / this.MAX_SPEED);
-        } else {
-            // Auto-straightening when no steering input
-            if (Math.abs(this.carSpeed) > 0.1) { // Only auto-straighten when moving
-                // Determine direction to straighten
-                const straightenForce = -Math.sign(this.CURRENT_STEERING) *
-                    this.AUTO_STRAIGHTEN_SPEED *
-                    Math.abs(this.carSpeed / this.MAX_SPEED); // Scale with speed
-
-                // Apply straightening force if not already straight
-                if (Math.abs(this.CURRENT_STEERING) > this.STRAIGHTEN_DEADZONE) {
-                    this.STEERING_SPEED += straightenForce;
-                } else {
-                    // If nearly straight, reset steering completely
-                    this.CURRENT_STEERING = 0;
-                    this.STEERING_SPEED = 0;
-                }
-            }
-
-            // Apply normal steering deceleration
-            this.STEERING_SPEED *= this.STEERING_DECELERATION;
         }
 
-        // Clamp steering speed with dynamic maximum
-        this.STEERING_SPEED = Phaser.Math.Clamp(
-            this.STEERING_SPEED,
-            -currentMaxSteering,
-            currentMaxSteering
-        );
+        // Handle touch input for steering (updated by touch events in addTouchControls)
+        const currentMaxSteering = this.calculateMaxSteering();
 
-        // Update current steering with dynamic maximum
-        this.CURRENT_STEERING += this.STEERING_SPEED;
-        this.CURRENT_STEERING = Phaser.Math.Clamp(
-            this.CURRENT_STEERING,
-            -currentMaxSteering,
-            currentMaxSteering
-        );
+        if (this.STEERING_SPEED === 0) {
+            // Auto-straighten if no steering input
+            if (Math.abs(this.CURRENT_STEERING) > this.STRAIGHTEN_DEADZONE) {
+                const straightenForce = -Math.sign(this.CURRENT_STEERING) *
+                    this.AUTO_STRAIGHTEN_SPEED *
+                    Math.abs(this.carSpeed / this.MAX_SPEED);
+                this.CURRENT_STEERING += straightenForce;
+            } else {
+                this.CURRENT_STEERING = 0; // Reset to center when almost straight
+            }
+        } else {
+            // Adjust steering speed based on current velocity
+            this.CURRENT_STEERING = Phaser.Math.Clamp(
+                this.CURRENT_STEERING + this.STEERING_SPEED,
+                -currentMaxSteering,
+                currentMaxSteering
+            );
+        }
 
-        // Apply steering effects only when moving
+        // Apply steering effects if the car is moving
         if (Math.abs(this.carSpeed) > 0.1) {
-            // Update car rotation based on steering and speed
             const targetRotation = this.CURRENT_STEERING * (this.carSpeed / this.MAX_SPEED);
             const tiltAmount = this.CURRENT_STEERING * this.MAX_TILT;
 
-            // Combine rotation and tilt
-            this.player.rotation = Phaser.Math.Linear(
-                this.player.rotation,
-                targetRotation,
-                0.2
-            );
+            // Rotate and tilt the car smoothly
+            this.player.rotation = Phaser.Math.Linear(this.player.rotation, targetRotation, 0.2);
+            this.player.x += this.CURRENT_STEERING * this.carSpeed * 2;
 
-            // Apply lateral movement based on speed and steering
-            const steeringForce = this.CURRENT_STEERING * Math.abs(this.carSpeed);
-            this.player.x += steeringForce * 2;
-
-            // Apply visual tilt through scale
+            // Apply a tilt effect visually
             const tiltScale = 1.0 + Math.abs(tiltAmount * 0.3);
             this.player.setScale(1.0, tiltScale);
 
-            // Apply gentle speed reduction when turning
-            if (Math.abs(this.CURRENT_STEERING) > this.MAX_STEERING / 2) {
+            // Slightly reduce speed during sharp turns
+            if (Math.abs(this.CURRENT_STEERING) > this.BASE_MAX_STEERING / 2) {
                 this.carSpeed *= this.TURN_SPEED_REDUCTION;
             }
         }
 
+        // Update steering wheel visual (if applicable)
         const wheelRotation = this.CURRENT_STEERING * 10;
         this.steeringWheel.setRotation(wheelRotation);
 
+        // Update car velocity
         this.carVelocity = this.carSpeed;
-        this.updateSpeedIndicator();
 
-        // Calculate forward offset based on speed
+        // Update forward offset based on speed
         const speedRatio = Math.abs(this.carSpeed) / this.MAX_SPEED;
         const forwardOffset = speedRatio * this.MAX_FORWARD_OFFSET;
 
-        // Update player Y position
+        // Adjust player Y position to create a dynamic speed effect
         this.player.y = this.BASE_PLAYER_Y - forwardOffset;
+
+        // Update speed bar UI (optional)
+        this.updateSpeedIndicator();
     }
+
 
     calculateMaxSteering() {
         // Calculate dynamic max steering based on speed
@@ -828,8 +863,8 @@ const config = {
     width: window.innerWidth,
     height: window.innerHeight,
     scale: {
-        mode: Phaser.Scale.RESIZE,
-        autoCenter: Phaser.Scale.CENTER_BOTH
+        mode: Phaser.Scale.FIT, // Ensures the game fits the screen
+        autoCenter: Phaser.Scale.CENTER_BOTH, // Centers the game on the screen
     },
     physics: {
         default: 'arcade',

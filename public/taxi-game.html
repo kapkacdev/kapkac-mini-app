@@ -12,8 +12,12 @@
             background-color: #000; /* Optional: Set a background color */
         }
         #game-container {
-            width: 100vw;
-            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 70px); /* Adjust height to account for MenuTab */
+            overflow: hidden;
         }
     </style>
     <!-- Include Phaser via CDN -->
